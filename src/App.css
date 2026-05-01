@@ -75,6 +75,12 @@ button {
   margin: 0;
 }
 
+.decision .decision-meta {
+  margin-bottom: 0.5rem;
+  color: #374151;
+  font-weight: 500;
+}
+
 .decision-go {
   background: #dcfce7;
 }

@@ -2,8 +2,29 @@ import './App.css'
 import { useMemo, useState } from 'react'
 import { evaluateDecision } from './features/plan/evaluateDecision'
 
+function dateInputValueFromDate(date) {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+function formatPlanDateLabel(isoDate) {
+  const [y, m, d] = isoDate.split('-').map(Number)
+  if (!y || !m || !d) return isoDate
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+}
+
 function App() {
   const [location, setLocation] = useState('')
+  const [planDate, setPlanDate] = useState(() =>
+    dateInputValueFromDate(new Date())
+  )
   const [activity, setActivity] = useState('hiking')
   const [condition, setCondition] = useState('clear')
   const [windKmh, setWindKmh] = useState(10)
@@ -40,6 +61,15 @@ function App() {
               placeholder="e.g. Wicklow Mountains"
               value={location}
               onChange={(event) => setLocation(event.target.value)}
+            />
+          </label>
+
+          <label>
+            Date
+            <input
+              type="date"
+              value={planDate}
+              onChange={(event) => setPlanDate(event.target.value)}
             />
           </label>
 
@@ -96,9 +126,16 @@ function App() {
         {hasSubmitted && (
           <article className={`decision decision-${decision.label.toLowerCase()}`}>
             <h2>{decision.label}</h2>
-            <p>
-              <strong>{location || 'Selected area'}:</strong> {decision.reason}
+            <p className="decision-meta">
+              <strong>{location || 'Selected area'}</strong>
+              {planDate ? (
+                <>
+                  {' '}
+                  · <time dateTime={planDate}>{formatPlanDateLabel(planDate)}</time>
+                </>
+              ) : null}
             </p>
+            <p>{decision.reason}</p>
           </article>
         )}
       </section>
