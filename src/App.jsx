@@ -1,6 +1,7 @@
 import './App.css'
 import { useMemo, useState } from 'react'
 import { evaluateDecision } from './features/plan/evaluateDecision'
+import { searchPlace } from './features/weather/openMeteoGeocode'
 
 function dateInputValueFromDate(date) {
   const y = date.getFullYear()
@@ -31,6 +32,10 @@ function App() {
   const [rainChance, setRainChance] = useState(10)
   const [hasSubmitted, setHasSubmitted] = useState(false)
 
+  const [geoLoading, setGeoLoading] = useState(false)
+  const [geoError, setGeoError] = useState(null)
+  const [geoMatch, setGeoMatch] = useState(null)
+
   const decision = useMemo(
     () =>
       evaluateDecision({
@@ -47,6 +52,26 @@ function App() {
     setHasSubmitted(true)
   }
 
+  async function handleLookUpPlace() {
+    const query = location.trim() || 'Waterford, Ireland'
+    setGeoLoading(true)
+    setGeoError(null)
+    setGeoMatch(null)
+
+    try {
+      const match = await searchPlace(query)
+      if (!match) {
+        setGeoError('No match from Open-Meteo. Try another spelling or add ", Ireland".')
+        return
+      }
+      setGeoMatch(match)
+    } catch (err) {
+      setGeoError(err instanceof Error ? err.message : 'Something went wrong.')
+    } finally {
+      setGeoLoading(false)
+    }
+  }
+
   return (
     <main className="app">
       <section className="panel">
@@ -58,11 +83,22 @@ function App() {
             Area
             <input
               type="text"
-              placeholder="e.g. Wicklow Mountains"
+              placeholder="e.g. Dungarvan, Ireland"
               value={location}
               onChange={(event) => setLocation(event.target.value)}
             />
           </label>
+          <button type="button" onClick={handleLookUpPlace}>
+            {geoLoading ? 'Looking up…' : 'Look up place (Open-Meteo)'}
+          </button>
+          {geoError ? <p className="geo-note geo-note-error">{geoError}</p> : null}
+          {geoMatch ? (
+            <p className="geo-note">
+              Matched: <strong>{geoMatch.name}</strong>
+              {geoMatch.admin1 ? `, ${geoMatch.admin1}` : ''} ({geoMatch.countryCode}) — lat{' '}
+              {geoMatch.latitude}, lon {geoMatch.longitude}
+            </p>
+          ) : null}
 
           <label>
             Date

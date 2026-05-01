@@ -61,6 +61,20 @@ button {
   font-weight: 700;
 }
 
+button[type='button'] {
+  background: #0f766e;
+}
+
+.geo-note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.geo-note-error {
+  color: #b91c1c;
+}
+
 .decision {
   margin-top: 1rem;
   border-radius: 10px;
