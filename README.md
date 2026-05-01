@@ -1,4 +1,4 @@
-# Weather Plan - Activity Suitability Planner + React Learning Project
+# Weather Plan - Activity plan + React learning project
 
 Target role focus: Software Engineer (Data Apps + FrontEnd)
 
@@ -26,7 +26,7 @@ The app includes:
 
 ## Core Product Rules (Domain Logic)
 
-- [ ] Define activity profiles with thresholds (hiking, kayaking, cycling, running).
+- [ ] Define activity profiles with thresholds (hiking, kayaking, surfing).
 - [ ] Score weather conditions against each profile.
 - [ ] Return `Go` / `Caution` / `No-Go` with short reasons.
 - [ ] Handle uncertainty when data is missing (especially marine data).
@@ -75,10 +75,10 @@ Use this as the living checklist whenever you come back to the project.
 
 ### Phase 5 - Advanced Hooks and Custom Hooks
 
-- [ ] Use `useMemo` for derived data (trend summaries, suitability score, computed labels).
+- [ ] Use `useMemo` for derived data (trend summaries, plan score, computed labels).
 - [ ] Use `useCallback` for stable handlers passed to child components.
 - [ ] Use `useRef` for focus management and interaction polish.
-- [ ] Create custom hooks: `useWeather`, `useMarine`, `useSuitabilityScore`, `useGeolocation`, `useDebounce`.
+- [ ] Create custom hooks: `useWeather`, `useMarine`, `usePlanScore`, `useGeolocation`, `useDebounce`.
 
 ### Phase 6 - Context and Reducer Patterns
 
